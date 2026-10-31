@@ -1,0 +1,7 @@
+const stage=document.getElementById('reactionStage');
+const score=document.getElementById('reactionScore');
+let state='idle',start=0,timer;
+function arm(){clearTimeout(timer);state='wait';stage.className='game-stage wait';stage.textContent='Wait for green...';timer=setTimeout(()=>{state='ready';start=performance.now();stage.className='game-stage ready';stage.textContent='CLICK NOW!';},1200+Math.random()*2500)}
+stage?.addEventListener('click',()=>{if(state==='idle'){arm()}else if(state==='wait'){clearTimeout(timer);state='idle';stage.className='game-stage';stage.textContent='Too early! Click to try again.'}else if(state==='ready'){const ms=Math.round(performance.now()-start);score.textContent=`Reaction: ${ms} ms`;state='idle';stage.className='game-stage';stage.textContent='Nice! Click to play again.'}});
+const guessInput=document.getElementById('guessInput'),guessMsg=document.getElementById('guessMsg');let secret=Math.floor(Math.random()*20)+1,tries=0;
+document.getElementById('guessBtn')?.addEventListener('click',()=>{const n=Number(guessInput.value);tries++;if(!Number.isInteger(n)||n<1||n>20){guessMsg.textContent='Enter a whole number from 1 to 20.';return}if(n===secret){guessMsg.textContent=`Correct! You got it in ${tries} tries. New number created.`;secret=Math.floor(Math.random()*20)+1;tries=0}else{guessMsg.textContent=n<secret?'Too low. Try higher.':'Too high. Try lower.'}});
